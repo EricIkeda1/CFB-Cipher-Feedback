@@ -1,9 +1,9 @@
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-import os
 
 # Defina uma chave fixa (32 bytes para AES-256)
-key = b'\x01' * 32  # Chave fixa de 32 bytes
+key = b'\x01' * 32  
+iv = b'\x01' * 16  
 
 # Função para cifrar o texto simples usando o modo CFB
 def encrypt(key, iv, plaintext):
@@ -21,27 +21,26 @@ def decrypt(key, iv, ciphertext):
 
 # Função principal
 def main():
-    # Gerar um IV aleatório
-    iv = os.urandom(16)  # IV aleatório de 16 bytes
+    global iv  
 
     # Menu de opções
     choice = input("Digite 1 para cifrar ou 2 para decifrar: ")
 
     if choice == '1':
         # Solicitar ao usuário que digite o texto simples
-        plaintext = input("Digite o texto simples: ").encode()  # Converte a string para bytes
+        plaintext = input("Digite o texto simples: ").encode()
 
         # Cifrar
         ciphertext = encrypt(key, iv, plaintext)
         print(f"Cifrado: {ciphertext.hex()}")
-        print(f"IV: {iv.hex()}")  # Exibir o IV gerado
+        print(f"IV: {iv.hex()}") 
 
     elif choice == '2':
         # Solicitar ao usuário que digite o texto cifrado e o IV
         ciphertext_input = input("Digite o texto cifrado em hexadecimal: ")
         iv_input = input("Digite o IV em hexadecimal: ")
-        ciphertext = bytes.fromhex(ciphertext_input)  # Converte de hexadecimal para bytes
-        iv = bytes.fromhex(iv_input)  # Converte o IV de hexadecimal para bytes
+        ciphertext = bytes.fromhex(ciphertext_input)
+        iv = bytes.fromhex(iv_input)  
 
         # Decifrar
         decrypted_text = decrypt(key, iv, ciphertext)
